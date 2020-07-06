@@ -9,6 +9,9 @@ import { UserInputError } from 'apollo-server-errors';
 import { createTransaction } from '@gqlapp/database-server-ts';
 import { log } from '@gqlapp/core-common';
 import settings from '@gqlapp/config';
+import { FileSystemStorage } from '@gqlapp/upload-server-ts';
+
+const storage = new FileSystemStorage();
 
 const USERS_SUBSCRIPTION = 'users_subscription';
 const {
@@ -72,6 +75,9 @@ export default pubsub => ({
       } else {
         return null;
       }
+    },
+    profileImg(obj) {
+      return obj.profileImg;
     }
   },
   Mutation: {
@@ -80,6 +86,14 @@ export default pubsub => ({
         return identity.id !== input.id ? ['user:create'] : ['user:create:self'];
       },
       async (obj, { input }, { User, req: { universalCookies, t }, mailer, req }) => {
+        if (input.image) {
+          try {
+            const uploadedFile = await storage.save(await input.image, settings.upload.uploadDir);
+            input.profile.profileImg = uploadedFile.path;
+          } catch (e) {
+            throw new Error(t('user:fileNotLoaded'));
+          }
+        }
         const errors = {};
 
         const userExists = await User.getUserByUsername(input.username);
@@ -154,6 +168,24 @@ export default pubsub => ({
         return identity.id !== args.input.id ? ['user:update'] : ['user:update:self'];
       },
       async (obj, { input }, { User, req: { identity, t }, mailer }) => {
+        if (input.image) {
+          let uploadedFile;
+          try {
+            uploadedFile = await storage.save(await input.image, settings.upload.uploadDir);
+          } catch (e) {
+            throw new Error(t('user:fileNotLoaded'));
+          }
+
+          if (input.profile.profileImg) {
+            try {
+              await storage.delete(input.profile.profileImg);
+            } catch (e) {
+              throw new Error(t('upload:fileNotDeleted'));
+            }
+          }
+          input.profile.profileImg = uploadedFile.path;
+        }
+
         const isAdmin = () => identity.role === 'admin';
         const isSelf = () => identity.id === input.id;
 

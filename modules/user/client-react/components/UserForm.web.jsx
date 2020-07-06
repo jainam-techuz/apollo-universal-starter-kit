@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { isEmpty } from 'lodash';
@@ -6,7 +6,18 @@ import { isEmpty } from 'lodash';
 import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
 import { email, minLength, required, match, validate } from '@gqlapp/validation-common-react';
-import { Form, RenderField, RenderSelect, RenderCheckBox, Option, Button, Alert } from '@gqlapp/look-client-react';
+import {
+  Form,
+  RenderField,
+  RenderSelect,
+  RenderCheckBox,
+  Option,
+  Button,
+  Alert,
+  CardImg
+} from '@gqlapp/look-client-react';
+import assets from '@gqlapp/favicon-common';
+import Dropzone from 'react-dropzone';
 import settings from '@gqlapp/config';
 
 const userFormSchema = {
@@ -26,8 +37,12 @@ const updateUserFormSchema = {
   passwordConfirmation: [match('password'), minLength(settings.auth.password.minLength)]
 };
 
+const defaultUserImage = assets['default_user.png'];
+
 const UserForm = ({ values, handleSubmit, errors, setFieldValue, t, shouldDisplayRole, shouldDisplayActive }) => {
-  const { username, email, role, isActive, profile, auth, password, passwordConfirmation } = values;
+  const { username, email, role, isActive, profile, image, auth, password, passwordConfirmation } = values;
+
+  const [previewImg, setPreviewImg] = useState(defaultUserImage);
 
   return (
     <Form name="user" onSubmit={handleSubmit}>
@@ -86,6 +101,19 @@ const UserForm = ({ values, handleSubmit, errors, setFieldValue, t, shouldDispla
           onChange={value => setFieldValue('auth', { ...auth, certificate: { ...auth.certificate, serial: value } })}
         />
       )}
+      <Dropzone
+        accept="image/*"
+        style={{ width: '300px' }}
+        onDrop={files => {
+          setFieldValue('image', files[0]);
+          setPreviewImg(files[0].preview);
+        }}
+      >
+        <CardImg
+          style={{ width: '70%' }}
+          src={!profile.profileImg || typeof image === 'object' ? previewImg : `../${profile.profileImg}`}
+        />
+      </Dropzone>
       <Field
         name="password"
         component={RenderField}
@@ -136,11 +164,13 @@ const UserFormWithFormik = withFormik({
       passwordConfirmation: '',
       profile: {
         firstName: profile && profile.firstName,
-        lastName: profile && profile.lastName
+        lastName: profile && profile.lastName,
+        profileImg: profile && profile.profileImg
       },
       auth: {
         ...values.initialValues.auth
-      }
+      },
+      image: undefined
     };
   },
   async handleSubmit(

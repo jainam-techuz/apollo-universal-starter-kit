@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 
 import { StripeSubscriptionProfile } from '@gqlapp/payments-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
-import { LayoutCenter, Card, CardGroup, CardTitle, CardText, PageLayout } from '@gqlapp/look-client-react';
+import { LayoutCenter, Card, CardGroup, CardTitle, CardText, CardImg, PageLayout } from '@gqlapp/look-client-react';
+import assets from '@gqlapp/favicon-common';
 import settings from '@gqlapp/config';
 
 const renderMetaData = t => {
@@ -21,6 +22,8 @@ const renderMetaData = t => {
     />
   );
 };
+
+const defaultUserImage = assets['default_user.jpg'];
 
 const ProfileView = ({ currentUserLoading, currentUser, t }) => {
   if (currentUserLoading && !currentUser) {
@@ -55,6 +58,17 @@ const ProfileView = ({ currentUserLoading, currentUser, t }) => {
                 <CardText>{currentUser.profile.fullName}</CardText>
               </CardGroup>
             )}
+            <CardGroup>
+              <CardTitle>{t('profile.card.group.profile')}:</CardTitle>
+              <CardImg
+                style={{ width: '50%' }}
+                src={
+                  currentUser && currentUser.profile && currentUser.profile.profileImg
+                    ? currentUser.profile.profileImg
+                    : defaultUserImage
+                }
+              />
+            </CardGroup>
             {/* Credit card info (Stripe subscription module)*/}
             {settings.stripe.subscription.enabled &&
               settings.stripe.subscription.publicKey &&
