@@ -13,6 +13,7 @@ exports.up = function(knex, Promise) {
       table.increments();
       table.string('first_name');
       table.string('last_name');
+      table.string('profile_img');
       table
         .integer('user_id')
         .unsigned()

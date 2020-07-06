@@ -18,9 +18,9 @@ const UserEdit = props => {
   const { user, editUser, t, history, navigation } = props;
 
   const onSubmit = async values => {
-    let userValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
+    let userValues = pick(values, ['username', 'email', 'role', 'isActive', 'password', 'image']);
 
-    userValues['profile'] = pick(values.profile, ['firstName', 'lastName']);
+    userValues['profile'] = pick(values.profile, ['firstName', 'lastName', 'profileImg']);
 
     userValues = UserFormatter.trimExtraSpaces(userValues);
 

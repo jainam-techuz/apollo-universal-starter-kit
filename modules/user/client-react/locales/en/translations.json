@@ -22,7 +22,6 @@
       "btnSubmit": "Send instructions"
     }
   },
-
   "login": {
     "title": "Login",
     "meta": "A Login page example",
@@ -47,7 +46,6 @@
       "sign": "Sign Up"
     }
   },
-
   "profile": {
     "title": "Profile",
     "headerText": "Profile info",
@@ -61,13 +59,13 @@
         "name": "User Name",
         "email": "Email",
         "role": "Role",
-        "full": "Full Name"
+        "full": "Full Name",
+        "profile": "Profile Image"
       },
       "fldEmail": "Email",
       "btnSubmit": "Send instructions"
     }
   },
-
   "reg": {
     "title": "Register",
     "meta": "A Registration page example",
@@ -88,7 +86,6 @@
     "successRegTitle": "Email Has Been Verified Successfully",
     "successRegBody": "Your email has been verified successfully. You can sign in using your login and password."
   },
-
   "resetPass": {
     "title": "Reset password",
     "meta": "A Reset Password page example",
@@ -102,7 +99,6 @@
       "btnSubmit": "Reset password"
     }
   },
-
   "userEdit": {
     "title": "Edit User",
     "meta": "An Edit User page example",
@@ -123,6 +119,7 @@
         "active": "Is Active",
         "firstName": "First Name",
         "lastName": "Last Name",
+        "profileImg": "Profile Image",
         "serial": "Serial",
         "pass": "Password",
         "passConf": "Password Confirmation"
@@ -138,7 +135,6 @@
   "userAdd": {
     "errorMsg": "Add user failed!"
   },
-
   "users": {
     "title": "Users",
     "meta": "A User List page example",
@@ -176,7 +172,6 @@
       "delete": "Delete"
     }
   },
-
   "nativeMock": "Hello, ",
   "mobile": {
     "login": {
