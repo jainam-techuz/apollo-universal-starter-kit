@@ -12,6 +12,7 @@ type UserProfile {
   firstName: String
   lastName: String
   fullName: String
+  profileImg: String
 }
 
 # Additional authentication service info
@@ -129,6 +130,7 @@ input AddUserInput {
   isActive: Boolean
   profile: ProfileInput
   auth: AuthInput
+  image: FileUpload
 }
 
 # Input for editUser Mutation
@@ -141,11 +143,13 @@ input EditUserInput {
   password: String
   profile: ProfileInput
   auth: AuthInput
+  image: FileUpload
 }
 
 input ProfileInput {
   firstName: String
   lastName: String
+  profileImg: String
 }
 
 extend type Subscription {
